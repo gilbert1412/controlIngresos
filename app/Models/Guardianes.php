@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Campos;
 class Guardianes extends Model
 {
     protected $table = 'guardianes';
@@ -14,5 +14,10 @@ class Guardianes extends Model
         'apeMaterno',
         'estado',
     ];
-    
+
+     public function campos()
+    {
+        return $this->hasMany(Campos::class, 'guardianes_id');
+    }
+
 }

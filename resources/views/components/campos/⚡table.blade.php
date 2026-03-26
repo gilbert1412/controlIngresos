@@ -1,10 +1,29 @@
 <?php
 
 use Livewire\Component;
-
+use App\Models\Campos;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 new class extends Component
 {
-    //
+    public $buscar='';
+    #[Computed]
+    #[on('recargar')]
+     public function dataCampos()
+    {
+        return Campos::where('nombre','like','%'.$this->buscar.'%')->get();
+    }
+
+    
+    public function editarCampo($id)
+    {
+        
+        $this->dispatch('editar-campo',id:$id);
+    }
+    public function eliminarCampo($id)
+    {
+        $this->dispatch('eliminar-campo',id:$id);
+    }
 };
 ?>
 
@@ -23,12 +42,41 @@ new class extends Component
                 <tr>
                     <th>ID</th>
                     <th>Nombre Completo</th>
+                    <th>Guardian</th>
                     <th>Estado</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
+                
+                    @foreach ($this->dataCampos() as $campo)
+                    <tr>
+                         <th>{{ $loop->index +1 }}</th>
+                        <th>{{ $campo->nombre }}</th>
+                        <th>{{ $campo->guardian->nombre }} {{ $campo->guardian->apePaterno }} {{ $campo->guardian->apeMaterno }}</th>
+                         <td>
+                            @if ($campo->estado == 'inactivo' )
+                                <span class="badge badge-danger">{{ $campo->estado }}</span>
+                            @else
+                                <span class="badge badge-success">{{ $campo->estado }}</span>
+                            @endif
 
+                        </td>
+                         <td class="text-center">
+                            @if ($campo->estado =='inactivo')
+                                <button class="btn btn-sm btn-success" wire:click="editarCampo({{ $campo->id }})">
+                                    <i class="fas fa-edit fa-sm"></i> Activar
+                                </button>
+                            @else
+                            <button class="btn btn-sm btn-light text-info" wire:click="editarCampo({{ $campo->id }})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-light text-danger" wire:click="eliminarCampo({{ $campo->id }})"><i class="fas fa-trash"></i></button>
+                            @endif
+
+                        </td>
+                    </tr>
+                       
+                    @endforeach
+               
 
 
             </tbody>

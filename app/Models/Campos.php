@@ -14,9 +14,10 @@ class Campos extends Model
         'estado',
         'guardianes_id',
     ];
-
-    public function guardian()
+     public function guardian()
     {
-        return $this->belongsTo(Guardianes::class, 'guardian_id');
+        return $this->belongsTo(Guardianes::class, 'guardianes_id');
     }
+
+
 }
