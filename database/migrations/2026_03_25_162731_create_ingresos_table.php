@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('ingresos', function (Blueprint $table) {
             $table->id();
+             $table->string('numRecibo');
+             $table->date('fechaIngreso');
             $table->foreignId('campos_id')->constrained('campos')->onDelete('cascade');
-            $table->date('fechaIngreso');
+            $table->foreignId('guardianes_id')->constrained('guardianes')->onDelete('cascade');
             $table->double('monto', 15, 2);
             $table->enum('estado', ['activo', 'inactivo'])->default('activo');
-            $table->foreignId('guardianes_id')->constrained('guardianes')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }
